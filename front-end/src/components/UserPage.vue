@@ -1,13 +1,29 @@
 <template>
   <div class="main">
     <div class="menu">
+      <h3>Welcome to your page!</h3>
       <h2>
         Log Out
         <a @click="logout"><i class="fas fa-sign-out-alt"></i></a>
       </h2>
     </div>
-    <div class="header">
-      <h3>Welcome to my page!</h3>
+    <div id="bar">
+    </div>
+
+
+    <div class="wrapper">
+      <div class="container">
+        <div class="image">
+          <img :src="person.Owns" />
+        </div>
+        <div class="info">
+          <h3>{{ user.firstName }} {{ user.lastName }}</h3>
+
+          <h4>Description: {{ user.description }}</h4>
+          <h4>Location: {{ user.location }}</h4>
+          <h4>Favorite Car: {{ user.favorite }}</h4>
+        </div>
+      </div>
     </div>
 
     <div id="editUser">
@@ -25,20 +41,6 @@
         <br />
         <p>You may need to refresh the page</p>
         <button @click="editUserInfo(user)">Submit Changes</button>
-      </div>
-    </div>
-    <div class="wrapper">
-      <div class="container">
-        <div class="image">
-          <img :src="person.Owns" />
-        </div>
-        <div class="info">
-          <h3>{{ user.firstName }} {{ user.lastName }}</h3>
-
-          <h4>Description: {{ user.description }}</h4>
-          <h4>Location: {{ user.location }}</h4>
-          <h4>Favorite Car: {{ user.favorite }}</h4>
-        </div>
       </div>
     </div>
 
@@ -269,12 +271,107 @@ export default {
 </script>
 
 <style scoped>
+#bar {
+    color: black;
+    border-block-color: black;
+    margin-top: 35px;
+    padding-top: 5px;
+    background-color: black;
+    display: flex;
+}
 .menu {
   display: flex;
-  text-align: center;
+  justify-content: space-around;
 }
 
 .menu h2 {
-  font-size: 14px;
+  font-size: 18px;
+  align-self: center;
 }
+.wrapper {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+.wrapper .button {
+    align-content: flex-end;
+}
+.theCars{
+  text-align: center;
+}
+#editUser {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    text-align: center;
+}
+
+.image {
+    width: auto;
+    display: flex;
+    justify-content: center;
+    margin-top: 5px;
+}
+
+.info {
+    text-align: center;
+}
+
+
+.image img {
+    width: 50%;
+
+}
+
+.carImage img {
+    width: 90%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    align-content: center;
+    margin-top: 5px;
+}
+.carHeader {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.wrapcoll {
+    display:flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.contcoll {
+    margin: 10px;
+    margin-top: 50px;
+    width: 400px;
+    background-color: burlywood;
+}
+
+.carImage {
+    display: flex;
+    align-content: center;
+    text-align: center;
+    justify-content: center;
+}
+
+.infocoll {
+
+    text-align: center;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+}
+
+
 </style>

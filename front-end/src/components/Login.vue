@@ -14,11 +14,15 @@
     <div class="hero">
       <div class="heroBox">
         <form class="pure-form">
+          <p>Start by making an account</p>
+          <br />
           <fieldset>
             <legend>Register for an account</legend>
             <input placeholder="first name" v-model="firstName" />
             <input placeholder="last name" v-model="lastName" />
-            <input placeholder="description" v-model="description" />
+          </fieldset>
+          <fieldset>
+            <input placeholder="your location" v-model="location" />
             <input placeholder="favorite vehicle" v-model="favorite" />
           </fieldset>
           <fieldset>
@@ -26,6 +30,7 @@
             <input type="password" placeholder="password" v-model="password" />
           </fieldset>
           <fieldset>
+            <p>You Can Add More Info Later</p>
             <button
               type="submit"
               class="pure-button pure-button-primary"
@@ -38,7 +43,7 @@
         <p v-if="error" class="error">{{ error }}</p>
         <form class="pure-form space-above">
           <fieldset>
-            <legend>Login</legend>
+            <legend>Or Login</legend>
             <input placeholder="username" v-model="usernameLogin" />
             <input
               type="password"
@@ -76,7 +81,7 @@ export default {
       passwordLogin: "",
       error: "",
       errorLogin: "",
-      description: "",
+      location: "",
       favorite: "",
     };
   },
@@ -91,7 +96,7 @@ export default {
         let response = await axios.post("/api/users", {
           firstName: this.firstName,
           lastName: this.lastName,
-          description: this.description,
+          description: this.location,
           favorite: this.favorite,
           username: this.username,
           password: this.password,
@@ -132,7 +137,7 @@ h1 {
 }
 
 .hero {
-  padding: 120px;
+  padding: 50px;
   display: flex;
   justify-content: center;
 }
@@ -181,5 +186,8 @@ input {
     padding-top: 5px;
     background-color: black;
     display: flex;
+}
+p {
+  font-size: 18px;
 }
 </style>
