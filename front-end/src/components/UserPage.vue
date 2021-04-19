@@ -1,5 +1,8 @@
 <template>
   <div class="main">
+    <div class="link">
+      <router-link to="/cars" tag="button">View other Cars</router-link>
+    </div>
     <div class="menu">
       <h3>Welcome to your page!</h3>
       <h2>
@@ -139,10 +142,6 @@ export default {
       favorite: "",
       firstName: "",
       lastName: "",
-      make: "",
-      model: "",
-      color: "",
-      year: "",
       error: "",
       file: null,
       url: "",
@@ -271,6 +270,12 @@ export default {
 </script>
 
 <style scoped>
+.router-link {
+  text-align: center;
+}
+.link {
+  text-align: center;
+}
 #bar {
     color: black;
     border-block-color: black;
@@ -331,7 +336,7 @@ export default {
 
 .carImage img {
     width: 90%;
-    height: auto;
+    height: 360px;
     display: flex;
     justify-content: center;
     text-align: center;

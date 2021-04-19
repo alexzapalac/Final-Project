@@ -7,7 +7,8 @@
   <div class="foot">  
     <footer>
         <p>Author: Alex Zapalac</p>
-        <p><a href="https://github.com/alexzapalac/Creative-Project-04.git">Github Repository</a></p>
+        <p><a href="https://github.com/alexzapalac/Final-Project">Github Repository</a></p>
+        <p>This Project took around 12 hours</p>
     </footer>
   </div>
 </div>
@@ -80,5 +81,10 @@ h2 {
 .foot {
   margin-top: 50px;
   text-align: center;
+}
+
+.foot p {
+  display: flex;
+  justify-content: center;
 }
 </style>

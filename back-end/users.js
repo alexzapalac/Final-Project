@@ -218,9 +218,7 @@ router.delete("/", validUser, async (req, res) => {
 
 // Edit Users info
 
-router.put('/:userID', async (req, res) => {
-  console.log("here");
-  console.log(req.body.firstName);
+router.put('/:userID', validUser, async (req, res) => {
   try {
     let per = await User.findOne({ _id: req.params.userID })
     if (!per) {
@@ -237,6 +235,23 @@ router.put('/:userID', async (req, res) => {
 
     res.send(per);
   } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+});
+
+
+// Get username from ID
+
+router.get('/:userID', async(req, res) => {
+  try { 
+    let user = await User.findOne({_id: req.params.userID});
+    if (!user) {
+      res.sendStatus(404);
+      return;
+    }
+    res.send(user);
+  } catch(error) {
     console.log(error);
     res.sendStatus(500);
   }
@@ -275,7 +290,7 @@ router.post('/carphotos', upload.single('carphoto'), async (req, res) => {
 
 //Create Car
 
-router.post('/:userID/cars', async (req, res) => {
+router.post('/:userID/cars', validUser, async (req, res) => {
   try {
     let per = await User.findOne({ _id: req.params.userID })
     if (!per) {
@@ -331,9 +346,39 @@ router.get('/:userID/cars', async (req, res) => {
   }
 });
 
+//get all cars for car page
+
+router.get("/cars/all", async(req, res) => {
+  try {
+    let cars  = await Car.find().sort({
+      created: -1
+    }).populate('user');
+    return res.send(cars);
+  } catch(error) {
+    console.log(error);
+    return res.sendStatus(500);
+  }
+}),
+
+//get a single car for car page
+
+router.get('/cars/:carID', async (req, res) =>{
+  try {
+    let car = await Car.findOne({_id:req.params.carID});
+    if (!car) {
+      res.sendStatus(404);
+      return;
+    }
+    res.send(car);
+  } catch(error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+});
+
 //Edit vehicle info
 
-router.put('/:userID/cars/:carID', async(req,res) => {
+router.put('/:userID/cars/:carID', validUser, async(req,res) => {
   try{
     let car = await Car.findOne({_id: req.params.carID, user: req.params.userID});
     if(!car) {
@@ -357,7 +402,7 @@ router.put('/:userID/cars/:carID', async(req,res) => {
 
 //Delete Vehicle
 
-router.delete('/:userID/cars/:carID', async (req, res) => {
+router.delete('/:userID/cars/:carID', validUser, async (req, res) => {
   try {
     let car = await Car.findOne({_id:req.params.carID, user: req.params.userID});
     if (!car) {
@@ -371,6 +416,72 @@ router.delete('/:userID/cars/:carID', async (req, res) => {
     res.sendStatus(500);
   }
 });
+
+
+
+//Schema for Comments
+const commentSchema = new mongoose.Schema({
+  user: {
+    type: mongoose.Schema.ObjectId,
+    ref: "User"
+  },
+  car: {
+    type: mongoose.Schema.ObjectId,
+    ref: "Car"
+  },
+  text: String,
+  created: {
+    type: Date,
+    default: Date.now
+  },
+});
+
+//Model for Comments
+const Comment = mongoose.model('Comment', commentSchema);
+
+
+//Add a comment to car page
+
+router.post("/cars/:id", validUser, async (req, res) => {
+  try {
+    let car = await Car.findOne({_id: req.params.id
+    }).sort({
+      created: -1
+    }).populate('user');
+    let comment = new Comment({
+      text: req.body.text,
+      user: req.user,
+      car: car,
+    });
+    await comment.save();
+    return res.sendStatus(200);
+  } catch(error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+});
+
+
+//get Comments for specific car
+router.get("/cars/:id/comments", async (req, res) => {
+  try {
+    let car = await Car.findOne({
+      _id: req.params.id
+    }).sort({
+      created: -1
+    }).populate('user');
+    let comments = await Comment.find({
+      car: car,
+    }).sort({
+      created: -1
+    }).populate('user');
+    return res.send(comments);
+  } catch(error) {
+    console.log(error);
+    return res.sendStatus(500);
+  }
+});
+
 
 module.exports = {
   routes: router,
