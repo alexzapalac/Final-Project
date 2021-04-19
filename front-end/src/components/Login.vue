@@ -1,50 +1,63 @@
 <template>
-  <div class="hero">
-    <div class="heroBox">
-      <form class="pure-form">
-        <fieldset>
-          <legend>Register for an account</legend>
-          <input placeholder="first name" v-model="firstName" />
-          <input placeholder="last name" v-model="lastName" />
-          <input placeholder="description" v-model="description" />
-          <input placeholder="favorite vehicle" v-model="favorite" />
-        </fieldset>
-        <fieldset>
-          <input placeholder="username" v-model="username" />
-          <input type="password" placeholder="password" v-model="password" />
-        </fieldset>
-        <fieldset>
-          <button
-            type="submit"
-            class="pure-button pure-button-primary"
-            @click.prevent="register"
-          >
-            Register
-          </button>
-        </fieldset>
-      </form>
-      <p v-if="error" class="error">{{ error }}</p>
-      <form class="pure-form space-above">
-        <fieldset>
-          <legend>Login</legend>
-          <input placeholder="username" v-model="usernameLogin" />
-          <input
-            type="password"
-            placeholder="password"
-            v-model="passwordLogin"
-          />
-        </fieldset>
-        <fieldset>
-          <button
-            type="submit"
-            class="pure-button pure-button-primary"
-            @click.prevent="login"
-          >
-            Login
-          </button>
-        </fieldset>
-      </form>
-      <p v-if="errorLogin" class="error">{{ errorLogin }}</p>
+  <div class="everything">
+    <div id="welcome">
+      <h3>Welcome to your Local Auto Club</h3>
+
+    </div>
+    <div class="coolCars">
+      <img src="logo/car1.jpg">
+      <img src="logo/car2.jpg">
+      <img src="logo/car3.jpg">
+    </div>
+    <div id="bar">
+    </div>
+    <div class="hero">
+      <div class="heroBox">
+        <form class="pure-form">
+          <fieldset>
+            <legend>Register for an account</legend>
+            <input placeholder="first name" v-model="firstName" />
+            <input placeholder="last name" v-model="lastName" />
+            <input placeholder="description" v-model="description" />
+            <input placeholder="favorite vehicle" v-model="favorite" />
+          </fieldset>
+          <fieldset>
+            <input placeholder="username" v-model="username" />
+            <input type="password" placeholder="password" v-model="password" />
+          </fieldset>
+          <fieldset>
+            <button
+              type="submit"
+              class="pure-button pure-button-primary"
+              @click.prevent="register"
+            >
+              Register
+            </button>
+          </fieldset>
+        </form>
+        <p v-if="error" class="error">{{ error }}</p>
+        <form class="pure-form space-above">
+          <fieldset>
+            <legend>Login</legend>
+            <input placeholder="username" v-model="usernameLogin" />
+            <input
+              type="password"
+              placeholder="password"
+              v-model="passwordLogin"
+            />
+          </fieldset>
+          <fieldset>
+            <button
+              type="submit"
+              class="pure-button pure-button-primary"
+              @click.prevent="login"
+            >
+              Login
+            </button>
+          </fieldset>
+        </form>
+        <p v-if="errorLogin" class="error">{{ errorLogin }}</p>
+      </div>
     </div>
   </div>
 </template>
@@ -65,7 +78,6 @@ export default {
       errorLogin: "",
       description: "",
       favorite: "",
-
     };
   },
 
@@ -149,5 +161,25 @@ input {
   font-size: 10px;
   background-color: #d9534f;
   color: #fff;
+}
+#welcome {
+    align-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.coolCars {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    padding: 2px;
+}
+#bar {
+    color: black;
+    border-block-color: black;
+    margin-top: 5px;
+    padding-top: 5px;
+    background-color: black;
+    display: flex;
 }
 </style>

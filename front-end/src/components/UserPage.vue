@@ -1,16 +1,13 @@
 <template>
   <div class="main">
     <div class="menu">
-      <p>
-        <a><i class="fas fa-image"></i></a>
-      </p>
       <h2>
-        {{ user.firstName }} {{ user.lastName }}
+        Log Out
         <a @click="logout"><i class="fas fa-sign-out-alt"></i></a>
       </h2>
     </div>
     <div class="header">
-      <h2>Welcome to my page!</h2>
+      <h3>Welcome to my page!</h3>
     </div>
 
     <div id="editUser">
@@ -20,12 +17,13 @@
         <br />
         <input type="text" v-model="lastName" placeholder="Last Name" />
         <br />
-        <input type="text" v-model="description" placeholder="Description" />
+        <textarea type="text" v-model="description" placeholder="Description"></textarea>
         <br />
         <input type="text" v-model="location" placeholder="Your Location" />
         <br />
         <input type="text" v-model="favorite" placeholder="Favorite Car" />
         <br />
+        <p>You may need to refresh the page</p>
         <button @click="editUserInfo(user)">Submit Changes</button>
       </div>
     </div>
@@ -49,45 +47,12 @@
     <div class="carHeader">
       <h3>My Car Collection</h3>
     </div>
-    <!--
-    <div class="add">
-      <h3>Add a Vehicle</h3>
-      <form class="addCar" @submit.prevent="upload">
-        <fieldset>
-          <input v-model="make" placeholder="Make" />
-        </fieldset>
-        <fieldset>
-          <input v-model="model" placeholder="Model" />
-        </fieldset>
-        <fieldset>
-          <input v-model="color" placeholder="Color" />
-        </fieldset>
-        <fieldset>
-          <input v-model="year" placeholder="Year" />
-        </fieldset>
-        <fieldset>
-          <div class="imageInput" @click="chooseImage">
-            <img v-if="url" :src="url" />
-            <div v-if="!url" class="placeholder">Choose an image</div>
-            <input
-              class="fileInput"
-              ref="fileInput"
-              type="file"
-              @input="fileChanged"
-            />
-          </div>
-          <p v-if="error" class="error">{{ error }}</p>
-        </fieldset>
-        <fieldset>
-          <button type="submit" class="pure-button pure-button-primary right">
-            Upload
-          </button>
-        </fieldset>
-      </form>
-    </div>-->
+
+
+    <!-- Add Car -->
     <div class="theCars">
-      <p>The Cars</p>
-      <form @submit.prevent="addCars">
+      <button @click="setAddACarTrue()">Add a Car</button>
+      <form @submit.prevent="addCars" v-if="addACar">
         <input type="text" v-model="make" placeholder="Make" />
         <br />
         <input type="text" v-model="model" placeholder="Model" />
@@ -97,9 +62,12 @@
         <input type="text" v-model="year" placeholder="Year" />
         <br />
         <input type="file" name="carphoto" @change="fileChanged" />
-        <button type="submit">Add Make Car</button>
+        <p>You may have to refresh the page</p>
+        <button type="submit">Add Car</button>
       </form>
     </div>
+
+    <br />
 
     <div class="image" v-for="photo in photos" v-bind:key="photo._id">
       <div class="photoInfo">
@@ -176,12 +144,16 @@ export default {
       error: "",
       file: null,
       url: "",
+      addACar: false,
     };
   },
   computed: {
     user() {
       return this.$root.$data.user;
     },
+  },
+  async created() {
+    await this.getCars();
   },
   methods: {
     async logout() {
@@ -197,6 +169,9 @@ export default {
     },
     setEditUserTrue() {
       this.editUser = true;
+    },
+    setAddACarTrue() {
+      this.addACar = true;
     },
     async editUserInfo(user) {
       try {
@@ -226,26 +201,6 @@ export default {
     chooseImage() {
       this.$refs.fileInput.click();
     },
-    async upload() {
-      try {
-        const formData = new FormData();
-        formData.append("photo", this.file, this.file.name);
-        formData.append("make", this.make);
-        formData.append("model", this.model);
-        formData.append("color", this.color);
-        formData.append("year", this.year);
-        await axios.post("/api/photos", formData);
-        this.file = null;
-        this.url = "";
-        this.make = "";
-        this.model = "";
-        this.color = "";
-        this.year = "";
-        this.$emit("uploadFinished");
-      } catch (error) {
-        this.error = "Error: " + error.response.data.message;
-      }
-    },
 
     async addCars() {
       try {
@@ -263,22 +218,52 @@ export default {
         this.make = "";
         this.model = "";
         this.year = "";
+        this.color = "";
         this.path = "";
         this.getCars();
+        this.addACar = false;
       } catch (error) {
         console.log(error);
       }
     },
 
-    async getCars(){
+    async getCars() {
       try {
         const response = await axios.get(`/api/users/${this.user._id}/cars`);
         this.cars = response.data;
-      } catch(error) {
+      } catch (error) {
         console.log(error);
       }
     },
-    
+
+    async editCar(car) {
+      try {
+        await axios.put(`/api/users/${this.user._id}/cars/${car._id}`, {
+          make: this.make,
+          model: this.model,
+          year: this.year,
+          color: this.color,
+        });
+        this.getCars();
+        this.make = "";
+        this.model = "";
+        this.color = "";
+        this.year = "";
+        this.editItem = false;
+        return true;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    async deleteCar(car) {
+      try {
+        await axios.delete(`/api/users/${this.user._id}/cars/${car._id}`);
+        this.getCars();
+      } catch (error){
+        console.log(error);
+      }
+    },
   },
 };
 </script>
@@ -286,7 +271,7 @@ export default {
 <style scoped>
 .menu {
   display: flex;
-  justify-content: space-between;
+  text-align: center;
 }
 
 .menu h2 {

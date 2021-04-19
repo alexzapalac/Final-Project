@@ -1,16 +1,16 @@
 <template>
-
-  <div id="app">
-    <header id="header">
-      <h1>Auto Club</h1>
-      <nav>
-        <router-link to="/"><i class="fas fa-home"></i></router-link>
-        <router-link to="/dashboard"><i class="fas fa-user"></i></router-link>
-      </nav>
-    </header>
-    <router-view />
+<div id="app">
+  <div class="logo">
+    <img src="/logo/index.png">
   </div>
-
+  <router-view />
+  <div class="foot">  
+    <footer>
+        <p>Author: Alex Zapalac</p>
+        <p><a href="https://github.com/alexzapalac/Creative-Project-04.git">Github Repository</a></p>
+    </footer>
+  </div>
+</div>
 </template>
 
 <style>
@@ -65,5 +65,20 @@ h2 {
 
 .pure-button-primary {
   background-color: #277E8E;
+}
+.logo {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+.logo img {
+  border-width: 2px;
+  border: blue;
+}
+
+.foot {
+  margin-top: 50px;
+  text-align: center;
 }
 </style>

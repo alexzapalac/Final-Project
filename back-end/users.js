@@ -3,6 +3,13 @@ const mongoose = require('mongoose');
 const argon2 = require("argon2");
 
 const router = express.Router();
+const multer = require('multer')
+const upload = multer({
+  dest: '../front-end/public/images/',
+  limits: {
+    fileSize: 10000000
+  }
+});
 
 //
 // User schema and model
@@ -22,7 +29,7 @@ const userSchema = new mongoose.Schema({
 
 // This is a hook that will be called before a user record is saved,
 // allowing us to be sure to salt and hash the password first.
-userSchema.pre('save', async function(next) {
+userSchema.pre('save', async function (next) {
   // only hash the password if it has been modified (or is new)
   if (!this.isModified('password'))
     return next();
@@ -42,7 +49,7 @@ userSchema.pre('save', async function(next) {
 // This is a method that we can call on User objects to compare the hash of the
 // password the browser sends with the has of the user's true password stored in
 // the database.
-userSchema.methods.comparePassword = async function(password) {
+userSchema.methods.comparePassword = async function (password) {
   try {
     // note that we supply the hash stored in the database (first argument) and
     // the plaintext password. argon2 will do the hashing and salting and
@@ -58,7 +65,7 @@ userSchema.methods.comparePassword = async function(password) {
 // object to JSON. It deletes the password hash from the object. This ensures
 // that we never send password hashes over our API, to avoid giving away
 // anything to an attacker.
-userSchema.methods.toJSON = function() {
+userSchema.methods.toJSON = function () {
   var obj = this.toObject();
   delete obj.password;
   return obj;
@@ -214,11 +221,11 @@ router.delete("/", validUser, async (req, res) => {
 router.put('/:userID', async (req, res) => {
   console.log("here");
   console.log(req.body.firstName);
-  try{
-    let per = await User.findOne({_id: req.params.userID})
+  try {
+    let per = await User.findOne({ _id: req.params.userID })
     if (!per) {
-    res.sendStatus(404);
-    return;
+      res.sendStatus(404);
+      return;
     }
     per.firstName = req.body.firstName;
     per.lastName = req.body.lastName;
@@ -229,10 +236,10 @@ router.put('/:userID', async (req, res) => {
     await per.save();
 
     res.send(per);
-}   catch(error) {
+  } catch (error) {
     console.log(error);
     res.sendStatus(500);
-}
+  }
 });
 
 
@@ -270,7 +277,7 @@ router.post('/carphotos', upload.single('carphoto'), async (req, res) => {
 
 router.post('/:userID/cars', async (req, res) => {
   try {
-    let per = await User.findOne({_id: req.params.userID})
+    let per = await User.findOne({ _id: req.params.userID })
     if (!per) {
       res.sendStatus(404);
       return;
@@ -295,19 +302,75 @@ router.post('/:userID/cars', async (req, res) => {
 
 router.get('/:userID/cars/:carID', async (req, res) => {
   try {
-    let car = await Car.findOne({_id:req.params.carID, people: req.params.peopleID});
+    let car = await Car.findOne({ _id: req.params.carID, user: req.params.userID });
     if (!car) {
-        res.sendStatus(404);
-        return;
+      res.sendStatus(404);
+      return;
     }
-    let cars = await Car.find({people:people});
+    let cars = await Car.find({ user: user });
     res.send(cars);
-}   catch (error) {
+  } catch (error) {
     console.log(error);
     res.sendStatus(500);
-}  
+  }
 });
 
+//Send users cars to personal page
+
+router.get('/:userID/cars', async (req, res) => {
+  try {
+    let car = await Car.find({user: req.params.userID });
+    if (!car) {
+      res.sendStatus(404);
+      return;
+    }
+    res.send(car);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+});
+
+//Edit vehicle info
+
+router.put('/:userID/cars/:carID', async(req,res) => {
+  try{
+    let car = await Car.findOne({_id: req.params.carID, user: req.params.userID});
+    if(!car) {
+      res.sendStatus(404);
+      return;
+    }
+    car.make = req.body.make;
+    car.model = req.body.model;
+    car.color = req.body.color;
+    car.year = req.body.year;
+
+    await car.save();
+
+    res.send(car);
+  } catch(error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+});
+
+
+//Delete Vehicle
+
+router.delete('/:userID/cars/:carID', async (req, res) => {
+  try {
+    let car = await Car.findOne({_id:req.params.carID, user: req.params.userID});
+    if (!car) {
+      res.sendStatus(404);
+      return;
+    }
+    await car.delete();
+    res.sendStatus(200);
+  } catch(error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+});
 
 module.exports = {
   routes: router,
