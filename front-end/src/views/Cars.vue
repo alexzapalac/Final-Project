@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="tomypage" v-if="user">
-      <router-link to="/dashboard" tag="button">To Your Page</router-link>
+      <router-link class="pure-button pure-button-primary" to="/dashboard" tag="button">To Your Page</router-link>
     </div>
     <div class="tomypage" v-else>
       <router-link class="pure-button pure-button-primary" to="/dashboard" tag="button">To Login Page</router-link>

@@ -35,4 +35,4 @@ app.use(cookieSession({
 const users = require("./users.js");
 app.use("/api/users", users.routes);
 
-app.listen(3003, () => console.log('Server listening on port 3003!'));
+app.listen(3003, () => console.log('Server listening on port 3004!'));

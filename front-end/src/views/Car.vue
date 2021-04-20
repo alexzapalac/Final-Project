@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="link">
-      <router-link to="/cars" tag="button">Back to Cars</router-link>
+      <router-link class="pure-button pure-button-primary" to="/cars" tag="button">Back to Cars</router-link>
     </div>
 
     <div id="bar">
@@ -28,7 +28,7 @@
           placeholder="Submit your comment"
         ></textarea>
         <br />
-        <button @click="addComment()">Submit</button>
+        <button class="pure-button pure-button-primary" @click="addComment()">Submit</button>
       </fieldset>
     </div>
 

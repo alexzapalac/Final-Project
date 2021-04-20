@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <div class="link">
-      <router-link to="/cars" tag="button">View other Cars</router-link>
+      <router-link class="pure-button pure-button-primary" to="/cars" tag="button">View other Cars</router-link>
     </div>
     <div class="menu">
       <h3>Welcome to your page!</h3>
@@ -30,7 +30,7 @@
     </div>
 
     <div id="editUser">
-      <button @click="setEditUserTrue()">Edit User</button>
+      <button class="pure-button pure-button-primary" @click="setEditUserTrue()">Edit User</button>
       <div class="EditUserButton" v-if="editUser">
         <input type="text" v-model="firstName" placeholder="First Name" />
         <br />
@@ -43,7 +43,7 @@
         <input type="text" v-model="favorite" placeholder="Favorite Car" />
         <br />
         <p>You may need to refresh the page</p>
-        <button @click="editUserInfo(user)">Submit Changes</button>
+        <button class="pure-button pure-button-primary" @click="editUserInfo(user)">Submit Changes</button>
       </div>
     </div>
 
@@ -56,7 +56,7 @@
 
     <!-- Add Car -->
     <div class="theCars">
-      <button @click="setAddACarTrue()">Add a Car</button>
+      <button class="pure-button pure-button-primary" @click="setAddACarTrue()">Add a Car</button>
       <form @submit.prevent="addCars" v-if="addACar">
         <input type="text" v-model="make" placeholder="Make" />
         <br />
@@ -66,9 +66,9 @@
         <br />
         <input type="text" v-model="year" placeholder="Year" />
         <br />
-        <input type="file" name="carphoto" @change="fileChanged" />
+        <input  type="file" name="carphoto" @change="fileChanged" />
         <p>You may have to refresh the page</p>
-        <button type="submit">Add Car</button>
+        <button class="pure-button pure-button-primary" type="submit">Add Car</button>
       </form>
     </div>
 
@@ -103,9 +103,9 @@
             <br />
             <input type="text" v-model="model" placeholder="Model" />
             <br />
-            <input type="text" v-model="color" placeholder="Color" />
-            <br />
             <input type="text" v-model="year" placeholder="Year" />
+            <br />
+            <input type="text" v-model="color" placeholder="Color" />
             <br />
             <button @click="editCar(car)">Submit Edit</button>
           </div>
