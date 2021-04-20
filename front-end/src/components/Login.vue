@@ -14,7 +14,8 @@
     <div class="hero">
       <div class="heroBox">
         <form class="pure-form">
-          <p>Start by making an account</p>
+          <router-link class="pure-button pure-button-primary" to="/cars" tag="button">To Car Page</router-link>
+          <p>Or Make an Account and Join</p>
           <br />
           <fieldset>
             <legend>Register for an account</legend>
